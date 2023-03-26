@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // 액션의 type 정의
 // 액션의 타입 => 액션 생성자 이름
 // ADD_TODO => addTodo
@@ -68,5 +70,17 @@ export function getUsersFail(error) {
   return {
     type: GET_USERS_FAIL,
     error,
+  };
+}
+
+export function getUsersThunk() {
+  return async (dispatch) => {
+    try {
+      dispatch(getUsersStart());
+      const res = await axios.get("https://api.github.com/users");
+      dispatch(getUsersSuccess(res.data));
+    } catch (error) {
+      dispatch(getUsersFail(error));
+    }
   };
 }
